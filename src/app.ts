@@ -1,10 +1,10 @@
-import * as noginx from "express-noginx";
+import * as noginx from "./proxy";
 import * as express from "express";
 import * as fs from "fs";
 import * as pdd from './pdd'
 import * as path from 'path'
 noginx.dir('cert')
-const proxy: express.Express = noginx.express();
+const proxy = noginx.app();
 const app = express();
 
 proxy.use(function(req, res, next) {
