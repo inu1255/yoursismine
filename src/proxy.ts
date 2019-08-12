@@ -179,5 +179,6 @@ export function forward(req: express.Request) {
         data: req.body || req,
         maxRedirects: 0,
         responseType: 'stream',
+        validateStatus: () => true,
     });
 };

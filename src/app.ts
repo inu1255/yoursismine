@@ -10,6 +10,7 @@ const app = express();
 proxy.use(function(req, res, next) {
     if (req.method.toLowerCase() === "get") {
         let filename = process.cwd() + '/sites/' + req.headers["host"] + req.path;
+        console.log(filename)
         if (fs.existsSync(filename)) {
             res.setHeader('Access-Control-Allow-Origin', '*')
             res.sendFile(filename)
