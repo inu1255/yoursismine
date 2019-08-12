@@ -130,7 +130,7 @@ class App {
         // 默认: 直接转发请求
         this.app.use(function(req, res, next) {
             forward(req).then(s => {
-                res.writeHead(s.status, s.headers.raw());
+                res.writeHead(s.status, s.headers);
                 s.data.pipe(res);
             }).catch(next);
         });

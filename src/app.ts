@@ -22,6 +22,13 @@ proxy.listen(9999, function() {
     console.log(`app listen: ${9999}`)
 })
 
+app.options('/', function(req, res) {
+    res.writeHead(200, {
+        'Access-Control-Allow-Origin': '*'
+    })
+    res.end()
+})
+
 app.get('*', function(req, res) {
     if (req.query.anti_content) {
         pdd.config.anti_content = req.query.anti_content;
