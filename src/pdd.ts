@@ -33,7 +33,10 @@ export class Pdd {
             AccessToken: this.access_token,
             anti_content: config.anti_content,
         }))
+        console.log(url)
         return axios.post('https://api.pinduoduo.com' + url, data, {
+            validateStatus: () => true,
+            timeout: 10e3,
             headers: {
                 // "Accept": "*/*",
                 "Content-Type": "text/plain;charset=UTF-8",
