@@ -8,6 +8,7 @@ import * as CertManager from 'node-easy-cert'
 import { exec } from 'child_process';
 import * as path from 'path'
 import { ApplicationRequestHandler } from "express-serve-static-core";
+import * as request from 'request'
 
 let crtMgr
 
@@ -129,10 +130,7 @@ class App {
         this.port = port;
         // 默认: 直接转发请求
         this.app.use(function(req, res, next) {
-            forward(req).then(s => {
-                res.writeHead(s.status, s.headers);
-                s.data.pipe(res);
-            }).catch(next);
+            forward(req).pipe(res).once('error', next);
         });
         this.server.listen.apply(this.server, arguments);
     };
@@ -172,13 +170,11 @@ export function forward(req: express.Request) {
     if (url.indexOf(":") <= 0) {
         url = req.protocol + "://" + req.headers["host"] + url;
     }
-    return axios.request({
+    return request({
         url,
-        method: req.method as any,
+        method: req.method,
         headers: req.headers,
-        data: req.body || req,
+        body: req.body || req,
         maxRedirects: 0,
-        responseType: 'stream',
-        validateStatus: () => true,
     });
 };
