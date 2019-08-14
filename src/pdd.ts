@@ -33,7 +33,7 @@ export class Pdd {
             AccessToken: this.access_token,
             anti_content: config.anti_content,
         }))
-        console.log(url)
+        if (!/portal/.test(url)) console.log(url)
         return axios.post('https://api.pinduoduo.com' + url, data, {
             validateStatus: () => true,
             timeout: 10e3,
@@ -47,7 +47,7 @@ export class Pdd {
                 // "Cookie": this.cookie
             },
         }).then(ret => {
-            if (ret.data.error_msg) {
+            if (ret.data.error_msg || ret.data.error_code) {
                 ret.data.url = ret.config.url;
                 throw ret.data;
             }
