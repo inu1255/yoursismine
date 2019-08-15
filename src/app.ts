@@ -32,12 +32,15 @@ app.options('/', function(req, res) {
 
 app.get('*', function(req, res) {
     if (req.query.anti_content) {
+        res.writeHead(200, {
+            'Access-Control-Allow-Origin': '*'
+        })
         pdd.config.anti_content = req.query.anti_content;
     }
     res.end('');
 })
 
-app.listen(9998, function() {
+app.listen(9998, '0.0.0.0', function() {
     console.log(`app listen: ${9998}`)
 })
 
