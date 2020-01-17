@@ -46,7 +46,7 @@ function init(dir?: string) {
 
 class App {
     protected app: express.Express;
-    protected self_https;
+    protected self_https: { [key: string]: number };
     protected server: http.Server;
     httpFilter: (url: string) => boolean;
     httpsFilter: (url: string) => boolean;
@@ -61,7 +61,7 @@ class App {
         this.server = http.createServer(this.app);
         var that = this;
         this.httpFilter = function(url) {
-            return !url.endsWith(":443") && !url.endsWith(":8443");
+            return !url.endsWith(":443") && !url.endsWith(":8443") && !url.endsWith(":4430");
         };
         this.server.on('connect', function(req, cltSocket, head) {
             var srvSocket;
@@ -105,7 +105,7 @@ class App {
             srvSocket.pipe(cltSocket);
         });
     }
-    fakeSite(domain, cb) {
+    fakeSite(domain: string, cb: (port: number) => void) {
         if (this.self_https[domain]) {
             cb(this.self_https[domain]);
             return;
@@ -126,17 +126,17 @@ class App {
             });
         });
     }
-    listen(port, listeningListener?: () => void) {
+    listen(port: number, listeningListener?: () => void) {
         this.port = port;
         // 默认: 直接转发请求
         this.app.use(function(req, res, next) {
             forward(req).pipe(res).once('error', next);
         });
         this.server.listen.apply(this.server, arguments);
-    };
-    close(cb) {
+    }
+    close(cb: (err?: Error) => void) {
         this.server.close(cb);
-    };
+    }
 }
 
 var dir_flag = false;
@@ -144,7 +144,7 @@ var dir_flag = false;
  * 设置证书保存目录
  * @param {String} dir 证书保存目录
  */
-export function dir(dir) {
+export function dir(dir: string) {
     if (dir_flag) {
         console.error("不能重复设置证书目录");
         return;
