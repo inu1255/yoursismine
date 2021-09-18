@@ -5,65 +5,15 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"name": "app-ts",
 			"type": "node",
 			"request": "launch",
-			"name": "file",
+			"program": "${workspaceFolder}/src/app.ts",
+			"outFiles": ["${workspaceRoot}/dist/**/*.js"],
+			"console": "integratedTerminal",
 			"cwd": "${workspaceFolder}",
-			"program": "${file}",
-			"args": [
-				"--dev",
-				"-v"
-			]
+			"preLaunchTask": "npm: prestart",
+			"args": ["--dev"]
 		},
-		{
-			"name": "TS App",
-			"type": "node",
-			"request": "launch",
-			"args": ["${workspaceRoot}/src/app.ts", "-v", "--dev"],
-			"runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
-			"sourceMaps": true,
-			"cwd": "${workspaceRoot}",
-			"protocol": "inspector",
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen"
-		},
-		{
-			"name": "TS File",
-			"type": "node",
-			"request": "launch",
-			"args": ["${file}", "-v", "--dev"],
-			"runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
-			"sourceMaps": true,
-			"cwd": "${workspaceRoot}",
-			"protocol": "inspector",
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen"
-		},
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "Jest All",
-			"program": "${workspaceFolder}/node_modules/.bin/jest",
-			"args": ["--runInBand"],
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen",
-			"disableOptimisticBPs": true,
-			"windows": {
-				"program": "${workspaceFolder}/node_modules/jest/bin/jest"
-			}
-		},
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "Jest File",
-			"program": "${workspaceFolder}/node_modules/.bin/jest",
-			"args": ["${fileBasenameNoExtension}", "--config", "jest.config.js"],
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen",
-			"disableOptimisticBPs": true,
-			"windows": {
-				"program": "${workspaceFolder}/node_modules/jest/bin/jest"
-			}
-		}
 	]
 }

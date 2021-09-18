@@ -6,7 +6,7 @@
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
 		"target": "es2018",
-		// "sourceMap": true,
+		"sourceMap": true,
 		// "allowJs": true,
 		"outDir": "./dist",
 		"baseUrl": "./",

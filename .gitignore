@@ -1,2 +1,5 @@
 cert
 dist
+sites
+package-lock.json
+node_modules
