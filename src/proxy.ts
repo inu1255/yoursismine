@@ -1,7 +1,7 @@
 import * as https from "https";
 import * as http from "http";
 import * as net from "net";
-import * as URL from "url";
+import {URL} from "url";
 import * as CertManager from "node-easy-cert";
 import * as WebSocket from "ws";
 import * as express from "express";
@@ -253,9 +253,8 @@ export class App {
 export function forward(req: express.Request, onRes: (res: http.IncomingMessage) => void) {
 	var url = req.url;
 	if (!/^https?:/.test(url)) url = req.protocol + "://" + req.headers.host + req.url;
-	// eslint-disable-next-line node/no-deprecated-api
-	var u = URL.parse(url);
-	let r = (req.protocol == "http" ? http : https).request(
+	var u = new URL(url);
+	let r = (u.protocol == "http:" ? http : https).request(
 		{
 			...u,
 			method: req.method,
@@ -267,7 +266,8 @@ export function forward(req: express.Request, onRes: (res: http.IncomingMessage)
 		}
 	);
 	if (req.body) req.body.pipe(r);
-	else req.pipe(r);
+	else if (typeof req.pipe === "function") req.pipe(r);
+	else r.end();
 	return r;
 }
 
