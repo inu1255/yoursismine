@@ -1,6 +1,6 @@
 {
 	"name": "yoursismine",
-	"version": "2.0.2",
+	"version": "2.0.3",
 	"description": "auto server power by greenjs",
 	"main": "dist/proxy.js",
 	"bin": {

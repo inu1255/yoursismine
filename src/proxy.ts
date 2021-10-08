@@ -256,7 +256,7 @@ export function forward(req: express.Request, onRes: (res: http.IncomingMessage)
 	var u = new URL(url);
 	let host = u.hostname;
 	let port = u.port;
-	let path = u.pathname;
+	let path = u.pathname + u.search;
 	let username = u.username;
 	let password = u.password;
 	let r = (u.protocol == "http:" ? http : https).request(
