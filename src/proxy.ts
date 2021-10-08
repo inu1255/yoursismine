@@ -254,9 +254,18 @@ export function forward(req: express.Request, onRes: (res: http.IncomingMessage)
 	var url = req.url;
 	if (!/^https?:/.test(url)) url = req.protocol + "://" + req.headers.host + req.url;
 	var u = new URL(url);
+	let host = u.hostname;
+	let port = u.port;
+	let path = u.pathname;
+	let username = u.username;
+	let password = u.password;
 	let r = (u.protocol == "http:" ? http : https).request(
 		{
-			...u,
+			host,
+			port,
+			path,
+			username,
+			password,
 			method: req.method,
 			headers: req.headers,
 			rejectUnauthorized: false,
