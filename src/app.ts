@@ -2,7 +2,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import {exec} from "child_process";
-import {App} from "./proxy";
+import {App, forward} from "./proxy";
 
 process.on("uncaughtException", console.error);
 
@@ -37,13 +37,33 @@ async function main() {
 
 	// proxy.httpsFilter = (url) => false;
 
+	function mkdirs(dir: string) {
+		if (fs.existsSync(dir)) return;
+		mkdirs(path.dirname(dir));
+		fs.mkdirSync(dir);
+	}
+
 	proxy.use(async function (req, res, next) {
 		if (req.method.toLowerCase() === "get") {
 			let filename = process.cwd() + "/sites/" + req.headers.host + req.path;
 			if (filename.endsWith("/")) filename += "index.html";
 			fs.access(filename, function (err) {
-				if (err) next();
-				else {
+				if (err) {
+					delete req.headers["accept-encoding"];
+					forward(req, function (x) {
+						res.writeHead(x.statusCode, x.statusMessage, x.headers);
+						x.once("error", (e) => {
+							// FIXME: 这里可能有问题
+							res.end();
+						});
+						mkdirs(path.dirname(filename));
+						x.pipe(fs.createWriteStream(filename));
+						x.pipe(res);
+					}).once("error", (e) => {
+						res.writeHead(500, e.message);
+						res.end();
+					});
+				} else {
 					console.error("send", filename);
 					res.setHeader("Access-Control-Allow-Origin", "*");
 					res.sendFile(filename);
