@@ -57,7 +57,11 @@ async function main() {
 							res.end();
 						});
 						mkdirs(path.dirname(filename));
-						x.pipe(fs.createWriteStream(filename));
+						try {
+							x.pipe(fs.createWriteStream(filename));
+						} catch (error) {
+							console.error(error);
+						}
 						x.pipe(res);
 					}).once("error", (e) => {
 						res.writeHead(500, e.message);
