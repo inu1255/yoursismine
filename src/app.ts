@@ -49,6 +49,7 @@ async function main() {
 			if (filename.endsWith("/")) filename += "index.html";
 			fs.access(filename, function (err) {
 				if (err) {
+					console.error("cache", filename);
 					delete req.headers["accept-encoding"];
 					forward(req, function (x) {
 						res.writeHead(x.statusCode, x.statusMessage, x.headers);

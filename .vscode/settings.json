@@ -1,0 +1,6 @@
+{
+  // 不搜索这些目录
+	"files.exclude": {
+		"cert": true,
+  },
+}
